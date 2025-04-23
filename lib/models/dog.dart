@@ -10,6 +10,5 @@ class Dog with ChangeNotifier {
   void grow() {
     age++;
     notifyListeners();
-    print('listener age : $age');
   }
 }
