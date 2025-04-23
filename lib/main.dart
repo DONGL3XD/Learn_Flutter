@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<Dog>(
-      create: (context) => Dog(name: 'dog04', breed: 'breed04'),
+      create: (context) => Dog(name: 'dog05', breed: 'breed05', age: 3),
       child: MaterialApp(
-        title: 'Provider04',
+        title: 'Provider05',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
@@ -49,14 +49,14 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(title: Text("Provider 04")),
+      appBar: AppBar(title: Text("Provider 05")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '- name: ${Provider.of<Dog>(context).name}',
+              '- name: ${context.watch<Dog>().name}',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 10),
@@ -75,7 +75,7 @@ class BreedAndAge extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '- breed: ${Provider.of<Dog>(context).breed}',
+          '- breed: ${context.select<Dog, String>((Dog dog) => dog.breed)}',
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(height: 10),
@@ -93,12 +93,12 @@ class Age extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '- age: ${Provider.of<Dog>(context).age}',
+          '- age: ${context.select<Dog, int>((Dog dog) => dog.age)}',
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(height: 20),
         ElevatedButton(
-          onPressed: () => Provider.of<Dog>(context, listen: false).grow(),
+          onPressed: () => context.read<Dog>().grow(),
           child: Text('Grow', style: TextStyle(fontSize: 20)),
         ),
       ],
