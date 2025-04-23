@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:myapp/models/babies.dart';
 import 'package:myapp/models/dog.dart';
 import 'package:provider/provider.dart';
 
@@ -18,10 +19,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Dog>(
-      create: (context) => Dog(name: 'dog05', breed: 'breed05', age: 3),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Dog>(
+          create: (context) => Dog(name: 'dog06', breed: 'breed06', age: 3),
+        ),
+        FutureProvider<int>(
+          initialData: 0,
+          create: (context) {
+            final int dogAge = context.read<Dog>().age;
+            final babies = Babies(age: dogAge);
+            return babies.getBabies();
+          },
+        ),
+      ],
       child: MaterialApp(
-        title: 'Provider05',
+        title: 'Provider06',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
@@ -49,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(title: Text("Provider 05")),
+      appBar: AppBar(title: Text("Provider 06")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -97,6 +110,11 @@ class Age extends StatelessWidget {
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(height: 20),
+        Text(
+          '- number of babies: ${context.watch<int>()}',
+          style: TextStyle(fontSize: 20),
+        ),
+        SizedBox(height: 10),
         ElevatedButton(
           onPressed: () => context.read<Dog>().grow(),
           child: Text('Grow', style: TextStyle(fontSize: 20)),
