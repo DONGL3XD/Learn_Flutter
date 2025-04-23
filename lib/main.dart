@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<Dog>(
-          create: (context) => Dog(name: 'dog06', breed: 'breed06', age: 3),
+          create: (context) => Dog(name: 'dog07', breed: 'breed07', age: 3),
         ),
         FutureProvider<int>(
           initialData: 0,
@@ -32,9 +32,17 @@ class MyApp extends StatelessWidget {
             return babies.getBabies();
           },
         ),
+        StreamProvider<String>(
+          initialData: 'Bark 0 times',
+          create: (context) {
+            final int dogAge = context.read<Dog>().age;
+            final babies = Babies(age: dogAge * 2);
+            return babies.bark();
+          },
+        ),
       ],
       child: MaterialApp(
-        title: 'Provider06',
+        title: 'Provider07',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
@@ -62,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(title: Text("Provider 06")),
+      appBar: AppBar(title: Text("Provider 07")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -112,6 +120,11 @@ class Age extends StatelessWidget {
         SizedBox(height: 20),
         Text(
           '- number of babies: ${context.watch<int>()}',
+          style: TextStyle(fontSize: 20),
+        ),
+        SizedBox(height: 10),
+        Text(
+          '- number of barks: ${context.watch<String>()}',
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(height: 10),
