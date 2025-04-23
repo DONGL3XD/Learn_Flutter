@@ -1,4 +1,6 @@
-class Dog {
+import 'package:flutter/material.dart';
+
+class Dog with ChangeNotifier {
   final String name;
   final String breed;
   int age;
@@ -7,6 +9,7 @@ class Dog {
 
   void grow() {
     age++;
-    print('age : $age');
+    notifyListeners();
+    print('listener age : $age');
   }
 }
