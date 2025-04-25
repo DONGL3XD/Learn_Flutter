@@ -4,6 +4,8 @@
 //     "dart.previewFlutterUiGuides": true,
 
 import 'package:flutter/material.dart';
+import 'package:myapp/counter.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Provider 00',
+      title: 'Provider 11',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -26,22 +28,36 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("Provider 00"),
+        title: Text("Provider 11"),
       ),
-      body: Column(),
+      body: Center(
+        child: ChangeNotifierProvider<Counter>(
+          create: (_) => Counter(),
+          child: Builder(
+            builder: (context) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('${context.watch<Counter>().counter}'),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: context.read<Counter>().increment,
+                    child: Text('Increment', style: TextStyle(fontSize: 20)),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
