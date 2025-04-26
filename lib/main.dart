@@ -3,19 +3,24 @@
 //     },
 //     "dart.previewFlutterUiGuides": true,
 
-import 'dart:nativewrappers/_internal/vm/lib/ffi_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:myapp/ShowCounter.dart';
 import 'package:myapp/counter.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final Counter _counter = Counter();
 
   // This widget is the root of your application.
   @override
@@ -26,11 +31,26 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: ChangeNotifierProvider(
-        create: (context) => Counter(),
-        child: MyHomePage(),
-      ),
+      routes: {
+        '/':
+            (context) => ChangeNotifierProvider.value(
+              value: _counter,
+              child: MyHomePage(),
+            ),
+        '/counter':
+            (context) => ChangeNotifierProvider.value(
+              value: _counter,
+              child: ShowCounter(),
+            ),
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _counter.dispose();
+    super.dispose();
   }
 }
 
@@ -46,19 +66,9 @@ class MyHomePage extends StatelessWidget {
 
           children: [
             ElevatedButton(
-              child: Text('Show Counter?', style: TextStyle(fontSize: 20)),
+              child: Text('Show Counter', style: TextStyle(fontSize: 20)),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return ChangeNotifierProvider.value(
-                        value: context.read<Counter>(),
-                        child: ShowCounter(),
-                      );
-                    },
-                  ),
-                );
+                Navigator.pushNamed(context, '/counter');
               },
             ),
             SizedBox(height: 20),
