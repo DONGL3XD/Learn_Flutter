@@ -31,17 +31,27 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      routes: {
-        '/':
-            (context) => ChangeNotifierProvider.value(
-              value: _counter,
-              child: MyHomePage(),
-            ),
-        '/counter':
-            (context) => ChangeNotifierProvider.value(
-              value: _counter,
-              child: ShowCounter(),
-            ),
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(
+              builder:
+                  (context) => ChangeNotifierProvider.value(
+                    value: _counter,
+                    child: MyHomePage(),
+                  ),
+            );
+          case '/counter':
+            return MaterialPageRoute(
+              builder:
+                  (context) => ChangeNotifierProvider.value(
+                    value: _counter,
+                    child: ShowCounter(),
+                  ),
+            );
+          default:
+            return null;
+        }
       },
     );
   }
